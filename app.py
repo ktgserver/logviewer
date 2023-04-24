@@ -44,7 +44,7 @@ app.ctx.render_template = render_template
 
 @app.listener("before_server_start")
 async def init(app, loop):
-    database = parse_uri(mongo_uri).get('database') or 'modmail_bot'
+    database = parse_uri(MONGO_URI).get('database') or 'modmail_bot'
     app.ctx.db = AsyncIOMotorClient(MONGO_URI)[database]
 
 
