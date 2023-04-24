@@ -7,6 +7,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from sanic import Sanic, response
 from sanic.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader
+from pymongo.uri_parser import parse_uri
 
 from core.models import LogEntry
 
@@ -43,7 +44,8 @@ app.ctx.render_template = render_template
 
 @app.listener("before_server_start")
 async def init(app, loop):
-    app.ctx.db = AsyncIOMotorClient(MONGO_URI).modmail_bot
+    database = parse_uri(mongo_uri).get('database') or 'modmail_bot'
+    app.ctx.db = AsyncIOMotorClient(MONGO_URI)[database]
 
 
 @app.exception(NotFound)
